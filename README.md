@@ -53,7 +53,7 @@ The "Waiting for SSH to become available..." step will likely take some time whi
 Tell Vagrant about the new box(es) we just built with `vagrant box add`
 
 ```bash
-vagrant box add --name=vmware-ubuntu1404 file://builds/vmware-ubuntu1404.box
+vagrant box add --name=virtualbox-ubuntu1404 file://builds/virtualbox-ubuntu1404.box
 ```
 
 #### Install any necessary providers
