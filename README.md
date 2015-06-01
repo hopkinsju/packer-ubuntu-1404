@@ -28,15 +28,57 @@ If you don't have Ansible installed (perhaps you're using a Windows PC?), you ca
 
 ## Usage
 
+### Packer Build
+
 Make sure all the required software (listed above) is installed, then cd to the directory containing this README.md file, and run:
 
     $ packer build ubuntu1404.json
 
 After a few minutes, Packer should tell you the box was generated successfully.
 
-If you want to only build a box for one of the supported virtualization platforms (e.g. only build the VMware box), add `--only=vmware-iso` to the `packer build` command:
+If you want to only build a box for one of the supported virtualization platforms (e.g. only build the VirtualBox box), add `--only=virtualbox-iso` to the `packer build` command:
 
-    $ packer build --only=vmware-iso ubuntu1404.json
+    $ packer build --only=virtualbox-iso ubuntu1404.json
+
+The ubuntu1404.json file specifies both a VMWare and VirtualBox build, and by default packer will build both boxes. Because some VMWare Vagrant providers use non-free plugins, from here on out we will only be working with VirtualBox.
+
+#### Keeping an Eye on the Builds
+
+The "Waiting for SSH to become available..." step will likely take some time while the ubuntu install process proceeds, packages are downloaded, etc. When you're getting started, and are rightly distrustful of things making forward progress, you may want to watch. The VirtualBox build can be monitored through the VirtualBox GUI iteself, and VMWare builds can be monitored via VNC, the connection details of which should be visible in your shell.
+
+### Vagrant
+
+#### Add the packer output to Vagrant
+
+Tell Vagrant about the new box(es) we just built with `vagrant box add`
+
+```bash
+vagrant box add --name=vmware-ubuntu1404 file://builds/vmware-ubuntu1404.box
+```
+
+#### Install any necessary providers
+
+Depending on your current setup, and the provider you intend to use, you may need ot add the appropriate plugins to support those providers.
+
+##### VirtualBox Provider
+
+Vagrant supports VirtualBox by default. You will of course need to [download VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+
+##### VMWare Fusion Provider Plugin (should you need it)
+
+*Note that the vagrant-vmware-fusion plugin is not free and requires a license.*
+
+[Installation and license docuementation](http://docs.vagrantup.com/v2/vmware/installation.html)
+
+
+#### Init and Launch the VM
+
+```bash
+vagrant init
+```
+
+The previous command will create a Vagrantfile which defines the parameters for the VM we will launch in the next step. Refer to the [Vagrantfile documentation](http://docs.vagrantup.com/v2/vagrantfile/index.html) for details, but in general you may be interested in increasing the resources allocated to your VM.
+
 
 ## License
 
